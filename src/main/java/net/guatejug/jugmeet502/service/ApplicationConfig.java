@@ -6,19 +6,29 @@
 package net.guatejug.jugmeet502.service;
 
 import java.util.Set;
+import javax.mvc.security.Csrf;
 import javax.ws.rs.core.Application;
 
 /**
  *
  * @author shaka
  */
-@javax.ws.rs.ApplicationPath("")
+@javax.ws.rs.ApplicationPath("app")
 public class ApplicationConfig extends Application {
 
+    public ApplicationConfig() {
+        
+   //     this.getProperties().put("mvcVersion", "EDR2");
+   //     this.getProperties().put(Csrf.CSRF_PROTECTION, Csrf.CsrfOptions.EXPLICIT);
+    }
+
+    
     @Override
     public Set<Class<?>> getClasses() {
+
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
+        
         return resources;
     }
 
@@ -29,6 +39,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(net.guatejug.jugmeet502.HelloController.class);
         resources.add(net.guatejug.jugmeet502.service.CategoryFacadeREST.class);
     }
     
