@@ -34,7 +34,8 @@ import org.glassfish.ozark.ext.handlebars.HandlebarsViewEngine;
 @Path("category")
 public class CategoryController {
 
-    private static final Logger LOGGER = Logger.getLogger(CategoryController.class.getName());
+    @Inject
+    private transient Logger logger;
 
     @Inject
     private BindingResult br;
@@ -56,7 +57,7 @@ public class CategoryController {
     @GET
     @Path("create")
     public Viewable preCreate() {
-        LOGGER.info("create");
+        logger.info("create");
 
         models.put("category", new Category());
         return new Viewable("/views/category/create.html", models, HandlebarsViewEngine.class);
@@ -69,7 +70,7 @@ public class CategoryController {
 
         if (!this.br.isFailed()) {
 
-            LOGGER.log(Level.INFO, "category.name:  {0}", category.getName());
+            logger.log(Level.INFO, "category.name:  {0}", category.getName());
             try {
                 this.categoryDao.create(category);
                 models.put("message", "category_save");
@@ -78,7 +79,7 @@ public class CategoryController {
                 models.put("error", true);
                 models.put("message", "error_default");
                 models.put("category", category);
-                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         } else {
             models.put("message", this.br.getAllMessages());
@@ -89,7 +90,7 @@ public class CategoryController {
     @GET
     @Path("update")
     public Viewable preUpdate(@QueryParam("c") Integer categoryId) {
-        LOGGER.log(Level.INFO, "categoryId: {0}", categoryId);
+        logger.log(Level.INFO, "categoryId: {0}", categoryId);
 
         try {
             Category category = this.categoryDao.findById(categoryId);
@@ -97,7 +98,7 @@ public class CategoryController {
         } catch (Exception ex) {
             models.put("error", true);
             models.put("message", "error_default");
-            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return new Viewable("/views/category/update.html", models, HandlebarsViewEngine.class);
     }
@@ -106,7 +107,7 @@ public class CategoryController {
     @Path("update")
     @ValidateOnExecution(type = ExecutableType.NONE)
     public Viewable update(@Valid @BeanParam Category category) {
-        LOGGER.log(Level.INFO, "category: {0}", category);
+        logger.log(Level.INFO, "category: {0}", category);
 
         if (!this.br.isFailed()) {
             try {
@@ -116,7 +117,7 @@ public class CategoryController {
             } catch (Exception ex) {
                 models.put("error", true);
                 models.put("message", "error_default");
-                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         } else {
             models.put("message", this.br.getAllMessages());
