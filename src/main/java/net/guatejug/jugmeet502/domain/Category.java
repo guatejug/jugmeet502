@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -47,6 +48,7 @@ public class Category implements Serializable {
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "name")
+    @FormParam("name")
     private String name;
     @JoinTable(name = "lecture_category", joinColumns = {
         @JoinColumn(name = "category_id", referencedColumnName = "category_id")}, inverseJoinColumns = {
