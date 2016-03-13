@@ -46,8 +46,8 @@ public class Category implements Serializable {
     @FormParam("categoryId")
     private Integer categoryId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
+    @NotNull(message = "category.name.notNull")
+    @Size(min = 1, max = 200, message = "category.name.invalidSize")
     @Column(name = "name")
     @FormParam("name")
     private String name;

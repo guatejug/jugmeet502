@@ -13,6 +13,10 @@ import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.Viewable;
 import javax.mvc.annotation.Controller;
+import javax.mvc.binding.BindingResult;
+import javax.validation.Valid;
+import javax.validation.executable.ExecutableType;
+import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,6 +35,9 @@ import org.glassfish.ozark.ext.handlebars.HandlebarsViewEngine;
 public class CategoryController {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryController.class.getName());
+
+    @Inject
+    private BindingResult br;
 
     @Inject
     private Models models;
@@ -57,18 +64,24 @@ public class CategoryController {
 
     @POST
     @Path("create")
-    public Viewable create(@BeanParam Category category) {
+    @ValidateOnExecution(type = ExecutableType.NONE)
+    public Viewable create(@Valid @BeanParam Category category) {
 
-        LOGGER.log(Level.INFO, "category.name:  {0}", category.getName());
-        try {
-            this.categoryDao.create(category);
-            models.put("message", "category_save");
-            models.put("category", new Category());
-        } catch (Exception ex) {
-            models.put("error", true);
-            models.put("message", "error_default");
-            models.put("category", category);
-            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        if (!this.br.isFailed()) {
+
+            LOGGER.log(Level.INFO, "category.name:  {0}", category.getName());
+            try {
+                this.categoryDao.create(category);
+                models.put("message", "category_save");
+                models.put("category", new Category());
+            } catch (Exception ex) {
+                models.put("error", true);
+                models.put("message", "error_default");
+                models.put("category", category);
+                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        } else {
+            models.put("message", this.br.getAllMessages());
         }
         return new Viewable("/views/category/create.html", models, HandlebarsViewEngine.class);
     }
@@ -91,17 +104,22 @@ public class CategoryController {
 
     @POST
     @Path("update")
-    public Viewable update(@BeanParam Category category) {
+    @ValidateOnExecution(type = ExecutableType.NONE)
+    public Viewable update(@Valid @BeanParam Category category) {
         LOGGER.log(Level.INFO, "category: {0}", category);
 
-        try {
-            this.categoryDao.update(category);
-            models.put("category", category);
-            models.put("message", "category_update");
-        } catch (Exception ex) {
-            models.put("error", true);
-            models.put("message", "error_default");
-            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        if (!this.br.isFailed()) {
+            try {
+                this.categoryDao.update(category);
+                models.put("category", category);
+                models.put("message", "category_update");
+            } catch (Exception ex) {
+                models.put("error", true);
+                models.put("message", "error_default");
+                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        } else {
+            models.put("message", this.br.getAllMessages());
         }
         return new Viewable("/views/category/update.html", models, HandlebarsViewEngine.class);
     }
