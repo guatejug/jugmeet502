@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Category List</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>Category List</div>
+
+        <a href="create">Create</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category Id</th>
+                    <th>Category Name</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#each categories}}
+                <tr>
+                    <td>{{categoryId}}</td>
+                    <td>{{name}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </body>
+</html>
