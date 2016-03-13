@@ -40,6 +40,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(net.guatejug.jugmeet502.HelloController.class);
+        resources.add(net.guatejug.jugmeet502.controller.AttendeeController.class);
         resources.add(net.guatejug.jugmeet502.controller.CategoryController.class);
     }
     

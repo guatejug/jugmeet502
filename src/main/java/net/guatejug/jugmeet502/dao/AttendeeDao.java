@@ -1,4 +1,4 @@
-package net.guatejug.dao;
+package net.guatejug.jugmeet502.dao;
 
 import java.util.List;
 
