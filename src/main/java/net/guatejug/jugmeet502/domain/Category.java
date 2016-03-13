@@ -43,6 +43,7 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "category_id")
+    @FormParam("categoryId")
     private Integer categoryId;
     @Basic(optional = false)
     @NotNull
@@ -117,5 +118,5 @@ public class Category implements Serializable {
     public String toString() {
         return "net.guatejug.jugmeet502.domain.Category[ categoryId=" + categoryId + " ]";
     }
-    
+
 }
