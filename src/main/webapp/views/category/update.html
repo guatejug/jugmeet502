@@ -2,23 +2,24 @@
 
 <html>
     <head>
-        <title>Category Save</title>
+        <title>Category Update</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>Category Save</div>
+        <div>Category Update</div>
 
-        <form method="post" action="create">
+        <form method="post" action="update">
             <div>
+                <input id="categoryId" name="categoryId" type="hidden" value="{{category.categoryId}}" />
                 <label>Name:</label>
                 <input id="name" name="name" type="text" value="{{category.name}}" />
             </div>
             <div>
-                <input type="submit" value="Save"/>
+                <input type="submit" value="Update"/>
             </div>
         </form>
-        
+
         <strong>{{message}}</strong>
     </body>
 </html>

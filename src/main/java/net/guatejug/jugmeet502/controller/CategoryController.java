@@ -13,11 +13,11 @@ import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.Viewable;
 import javax.mvc.annotation.Controller;
-import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import net.guatejug.jugmeet502.dao.CategoryDao;
 import net.guatejug.jugmeet502.domain.Category;
 import org.glassfish.ozark.ext.handlebars.HandlebarsViewEngine;
@@ -50,7 +50,7 @@ public class CategoryController {
     @Path("create")
     public Viewable preCreate() {
         LOGGER.info("create");
-        
+
         models.put("category", new Category());
         return new Viewable("/views/category/create.html", models, HandlebarsViewEngine.class);
     }
@@ -71,5 +71,38 @@ public class CategoryController {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return new Viewable("/views/category/create.html", models, HandlebarsViewEngine.class);
+    }
+
+    @GET
+    @Path("update")
+    public Viewable preUpdate(@QueryParam("c") Integer categoryId) {
+        LOGGER.log(Level.INFO, "categoryId: {0}", categoryId);
+
+        try {
+            Category category = this.categoryDao.findById(categoryId);
+            models.put("category", category);
+        } catch (Exception ex) {
+            models.put("error", true);
+            models.put("message", "error_default");
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return new Viewable("/views/category/update.html", models, HandlebarsViewEngine.class);
+    }
+
+    @POST
+    @Path("update")
+    public Viewable update(@BeanParam Category category) {
+        LOGGER.log(Level.INFO, "category: {0}", category);
+
+        try {
+            this.categoryDao.update(category);
+            models.put("category", category);
+            models.put("message", "category_update");
+        } catch (Exception ex) {
+            models.put("error", true);
+            models.put("message", "error_default");
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return new Viewable("/views/category/update.html", models, HandlebarsViewEngine.class);
     }
 }
